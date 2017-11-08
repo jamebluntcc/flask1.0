@@ -1,16 +1,21 @@
 # coding:utf-8
 import os
-from ext import db
-from models import USER, TODO
-from flask import Flask, render_template, session, request, \
-    jsonify, redirect, url_for
-
-app = Flask(__name__)
-app.config.from_object("settings")
-
-db.init_app(app)
+from . import app, db
+from todo.models import TODO, USER
+from flask import session, render_template, \
+    request, redirect, url_for, jsonify
 
 basedir = os.path.abspath(os.path.join(__file__))
+
+
+'''
+@app.before_first_request
+def init():
+    db.create_all()
+    chen = USER(name='chencheng', password='050400')
+    db.session.add(chen)
+    db.session.commit()
+'''
 
 
 @app.route('/')

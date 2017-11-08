@@ -1,5 +1,5 @@
 # coding=utf-8
-from ext import db
+from app import db
 from datetime import datetime
 
 
