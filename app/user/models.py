@@ -38,6 +38,9 @@ class User(UserMixin, SurrogatePK, Model):
     last_name = Column(db.String(30), nullable=True)
     active = Column(db.Boolean(), default=False)
     is_admin = Column(db.Boolean(), default=False)
+    # add todo
+    todo_id = reference_col('todo', nullable=True)
+    todo = relationship('Todo', backref='users')
 
     def __init__(self, username, email, password=None, **kwargs):
         """Create instance."""
