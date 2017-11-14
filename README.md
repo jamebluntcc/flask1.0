@@ -1,9 +1,12 @@
 # todo1.0
 a simple web application created by flask & bootstrap3
-# log
-- add todo1.0 a complete authenticate system on 2017-08-10
-- add todo list on 2017-08-11
-- add todo database user and time columns on 2017-08-12
-- fix addtodo bugs and make it run well on 2017-08-15
-- fix create time bugs on 2017-08-22
-- refactor and modularization todo1.0 on 2017-9-29
+# Changelog
+version 1.0.0
+- (2017-08-10) add todo1.0 a complete authenticate system.
+- (2017-08-11) add todo list.
+- (2017-08-12) add todo database user and time columns.
+- (2017-08-15) fix addtodo bugs and make it run well.
+- (2017-08-22) fix create time bugs.
+- (2017-9-29) refactor and modularization todo1.0.
+- (2017-11-08) refactor make factor function to boot app.
+
