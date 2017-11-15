@@ -1,20 +1,32 @@
 # coding=utf-8
 
+import os
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+
 
 class BaseConfig(object):
-    SQLALCHEMY_DATABASE_URI = 'sqlite:////tmp/flask_todo_dev.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = 'akfdlcidhdswijkehcdkd'
+
+
+class DevConfig(BaseConfig):
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'dev.db')
     DEBUG = True
-    SECRET_KEY = 'dev'
 
 
 class ProductConfig(BaseConfig):
     DEBUG = False
-    SECRET_KEY = "djaeifheaofjaeofjeaafn"
+    SQLALCHEMY_DATABASE_URI = "mysql://{username}:{passwd}@{host}/{database}".format(
+        username=os.environ.get('USERNAME'),
+        passwd=os.environ.get('PASSWORD'),
+        host=os.environ.get('HOSTNAME', 'localhost'),
+        database=os.environ.get('DATABASE')
+    )
 
 
 Config = {
-    'develop': BaseConfig,
+    'develop': DevConfig,
     'product': ProductConfig,
-    'test': BaseConfig
+    'test': DevConfig
 }

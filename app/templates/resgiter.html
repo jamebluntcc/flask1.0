@@ -59,7 +59,7 @@ $(document).ready(function(){
       alert('twice password not equal!');
     }else{
       $.ajax({
-        url: "{{ url_for('check_resgiter') }}",
+        url: "{{ url_for('todo.check_resgiter') }}",
         data: {'user': user, 'password': password1},
         type: 'POST',
         cache: false,
@@ -67,7 +67,7 @@ $(document).ready(function(){
         ajax_func_flag: false,
         success: function(data){
           if(data.msg == 'ok'){
-            window.location.href = "{{url_for('login')}}";
+            window.location.href = "{{url_for('todo.login')}}";
           }else{
             alert(data.msg);
           }
