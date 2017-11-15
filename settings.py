@@ -1,12 +1,32 @@
 # coding=utf-8
+
 import os
-DEBUG = True
-SQLALCHEMY_DATABASE_URI = 'mysql://{user}:{passwd}@{host}:{port}/{database}'.format(
-    user=os.environ['USER'],
-    passwd=os.environ['PASSWD'],
-    host='localhost',
-    port=3306,
-    database='haha'
-)
-SQLALCHEMY_TRACK_MODIFICATIONS = False
-SECRET_KEY = 'dhaidhiahfoeawjfoeafhjoafjoeafhjeofeifieafeow'
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+
+class BaseConfig(object):
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SECRET_KEY = 'akfdlcidhdswijkehcdkd'
+
+
+class DevConfig(BaseConfig):
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'dev.db')
+    DEBUG = True
+
+
+class ProductConfig(BaseConfig):
+    DEBUG = False
+    SQLALCHEMY_DATABASE_URI = "mysql://{username}:{passwd}@{host}/{database}".format(
+        username=os.environ.get('USERNAME'),
+        passwd=os.environ.get('PASSWORD'),
+        host=os.environ.get('HOSTNAME', 'localhost'),
+        database=os.environ.get('DATABASE')
+    )
+
+
+Config = {
+    'develop': DevConfig,
+    'product': ProductConfig,
+    'test': DevConfig
+}

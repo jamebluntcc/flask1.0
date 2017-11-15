@@ -1,36 +1,39 @@
 # coding:utf-8
 import os
-from ext import db
-from models import USER, TODO
-from flask import Flask, render_template, session, request, \
-    jsonify, redirect, url_for
-
-app = Flask(__name__)
-app.config.from_object("settings")
-
-db.init_app(app)
-
+from app.extensions import db
+from models import TODO, USER
+from flask import session, render_template, \
+    request, redirect, url_for, jsonify
+from . import blueprint
 basedir = os.path.abspath(os.path.join(__file__))
+'''
+@todo.before_first_request
+def init():
+    db.create_all()
+    chen = USER(name='chencheng', password='050400')
+    db.session.add(chen)
+    db.session.commit()
+'''
 
 
-@app.route('/')
+@blueprint.route('/')
 def index():
     user = session.get('user', '')
     return render_template('index.html', user=user)
 
 
-@app.route('/login', methods=['GET'])
+@blueprint.route('/login', methods=['GET'])
 def login():
     user = session.get('user', '')
     return render_template('login.html', user=user)
 
 
-@app.route('/resgiter', methods=['GET'])
+@blueprint.route('/resgiter', methods=['GET'])
 def resgiter():
     return render_template('resgiter.html', user='')
 
 
-@app.route('/todo', methods=['GET'])
+@blueprint.route('/todo', methods=['GET'])
 def todo():
     user = session.get('user', '')
     todo_list = TODO.get_todo(user)
@@ -38,7 +41,7 @@ def todo():
     return render_template('todo.html', user=user, todo_list=todo_list)
 
 
-@app.route('/add_todo', methods=['POST'])
+@blueprint.route('/add_todo', methods=['POST'])
 def add_todo():
     if request.method == 'POST':
         user = session['user']
@@ -48,12 +51,12 @@ def add_todo():
             new_todo = TODO(todo=todo, user=user, description=describe)
             db.session.add(new_todo)
             db.session.commit()
-            return redirect(url_for('todo'))
+            return redirect(url_for('.todo'))
         else:
-            return redirect(url_for('add_todo'))
+            return redirect(url_for('.add_todo'))
 
 
-@app.route('/done_todo', methods=['GET'])
+@blueprint.route('/done_todo', methods=['GET'])
 def done_todo():
     user = request.args.get('user')
     todo_id = request.args.get('id')
@@ -62,16 +65,16 @@ def done_todo():
     db.session.delete(done_todo)
     db.session.commit()
 
-    return redirect(url_for('todo'))
+    return redirect(url_for('.todo'))
 
 
-@app.route('/login_out', methods=['GET'])
+@blueprint.route('/login_out', methods=['GET'])
 def login_out():
     session['user'] = None
-    return redirect(url_for('index'))
+    return redirect(url_for('.index'))
 
 
-@app.route('/check_login', methods=['POST'])
+@blueprint.route('/check_login', methods=['POST'])
 def check_login():
     if request.method == 'POST':
         user = request.form['user']
@@ -80,10 +83,10 @@ def check_login():
         if data['msg'] == 'ok':
             session['user'] = user
         return jsonify(data)
-    return redirect(url_for('login'))
+    return redirect(url_for('.login'))
 
 
-@app.route('/check_resgiter', methods=['POST'])
+@blueprint.route('/check_resgiter', methods=['POST'])
 def check_resgiter():
     if request.method == 'POST':
         user = request.form['user']
@@ -98,18 +101,14 @@ def check_resgiter():
             data['msg'] = 'ok'
 
         return jsonify(data)
-    return redirect(url_for('resgiter'))
+    return redirect(url_for('.resgiter'))
 
 
-@app.errorhandler(404)
+@blueprint.errorhandler(404)
 def not_found(e):
     return render_template('404.html'), 404
 
 
-@app.errorhandler(405)
+@blueprint.errorhandler(405)
 def method_not_allow(e):
     return render_template('405.html'), 405
-
-
-if __name__ == '__main__':
-    app.run()
