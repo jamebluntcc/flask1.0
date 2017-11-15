@@ -31,7 +31,7 @@
         alert('user and password field required!')
       }else{
         $.ajax({
-          url: "{{ url_for('check_login') }}",
+          url: "{{ url_for('todo.check_login') }}",
           data: {'user': user, 'password': password},
           type: 'POST',
           success: function(data){

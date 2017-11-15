@@ -1,5 +1,5 @@
 # coding=utf-8
-from app import db
+from app.extensions import db
 from datetime import datetime
 
 
