@@ -9,4 +9,5 @@ version 1.0.0
 - (2017-08-22) fix create time bugs.
 - (2017-9-29) refactor and modularization todo1.0.
 - (2017-11-08) refactor make factor function to boot app.
+- (2017-11-15) refactor add blueprint and optimize file structure.
 
